@@ -1,4 +1,4 @@
-export type AnalysisType = "simplify" | "risks" | "compare" | "qa";
+export type AnalysisType = "simplify" | "risks" | "compare" | "qa" | "checklist";
 
 export type Severity = "high" | "medium" | "low";
 
@@ -17,6 +17,31 @@ export interface RisksResult {
   obligations: RiskItem[];
   risks: RiskItem[];
   ambiguities: string[];
+  overallRiskLevel?: Severity;
+}
+
+export interface ActionItem {
+  task: string;
+  deadlineOrTrigger?: string;
+  priority: Severity;
+}
+
+export interface LawyerQuestion {
+  question: string;
+  contextOrClause: string;
+}
+
+export interface UserOption {
+  option: string;
+  pros: string;
+  cons: string;
+}
+
+export interface ChecklistResult {
+  summary: string;
+  actionItems: ActionItem[];
+  questionsForLawyer: LawyerQuestion[];
+  userOptions: UserOption[];
 }
 
 export interface DocumentDifference {
@@ -36,7 +61,13 @@ export interface QAResult {
   groundedInDocument: boolean;
 }
 
-export type AnalysisData = SimplifyResult | RisksResult | CompareResult | QAResult | { raw: string };
+export type AnalysisData =
+  | SimplifyResult
+  | RisksResult
+  | CompareResult
+  | QAResult
+  | ChecklistResult
+  | { raw: string };
 
 export interface AnalysisRequest {
   documentContent: string;
@@ -65,6 +96,7 @@ export interface UploadResponseBody {
   filename?: string;
   characterCount?: number;
   preview?: string;
+  content?: string;
   error?: string;
 }
 

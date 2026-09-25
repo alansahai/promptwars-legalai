@@ -32,6 +32,7 @@ export async function uploadDocument(
       filename: stored.filename,
       characterCount: content.length,
       preview: previewText(content),
+      content,
     });
   } catch (error) {
     console.error("Upload parsing error:", error);

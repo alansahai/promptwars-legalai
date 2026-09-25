@@ -44,30 +44,47 @@ export async function analyzeDocument(request: AnalysisRequest): Promise<Analysi
     return { success: true, data: cached, cached: true };
   }
 
-  try {
-    const prompt = buildPrompt(request);
-    const model = getClient().getGenerativeModel({
-      model: GEMINI_MODEL,
-      generationConfig: {
-        responseMimeType: "application/json",
-        temperature: 0.2,
-        maxOutputTokens: 2048,
-      },
-    });
+  const candidateModels = [
+    GEMINI_MODEL,
+    "gemini-2.5-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-flash-latest",
+  ].filter((m, i, arr) => arr.indexOf(m) === i);
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
-    const parsed = parseJSONResponse(responseText);
+  const prompt = buildPrompt(request);
+  let lastError: unknown = null;
 
-    analysisCache.set(key, parsed);
-    return { success: true, data: parsed };
-  } catch (error) {
-    console.error("Gemini analysis error:", error);
-    return {
-      success: false,
-      error: "Failed to analyze document. Please try again.",
-    };
+  for (const modelName of candidateModels) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: modelName,
+          generationConfig: {
+            responseMimeType: "application/json",
+            temperature: 0.2,
+            maxOutputTokens: 2048,
+          },
+        });
+
+        const result = await model.generateContent(prompt);
+        const responseText = result.response.text();
+        const parsed = parseJSONResponse(responseText);
+
+        analysisCache.set(key, parsed);
+        return { success: true, data: parsed };
+      } catch (error) {
+        lastError = error;
+        // Brief pause before retry/fallback
+        await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+      }
+    }
   }
+
+  console.error("Gemini analysis error:", lastError);
+  return {
+    success: false,
+    error: "Failed to analyze document. Please try again.",
+  };
 }
 
 function parseJSONResponse(text: string): AnalysisData {

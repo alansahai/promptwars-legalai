@@ -33,6 +33,13 @@ describe("buildPrompt", () => {
     expect(prompt).toContain("What is the penalty for late payment?");
   });
 
+  test("checklist prompt includes actionItems and questionsForLawyer", () => {
+    const prompt = buildPrompt({ documentContent: "Sample clause text", analysisType: "checklist" });
+    expect(prompt).toContain("actionItems");
+    expect(prompt).toContain("questionsForLawyer");
+    expect(prompt).toContain("userOptions");
+  });
+
   test("truncates very long documents", () => {
     const longDoc = "x".repeat(60000);
     const prompt = buildPrompt({ documentContent: longDoc, analysisType: "simplify" });

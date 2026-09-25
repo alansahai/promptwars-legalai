@@ -5,10 +5,10 @@ import { AnalysisResult } from "@/types";
 
 export async function analyze(req: Request, res: Response<AnalysisResult>): Promise<void> {
   const body = req.body ?? {};
-  const analysisType = body.analysisType as "simplify" | "risks" | undefined;
+  const analysisType = body.analysisType as "simplify" | "risks" | "checklist" | undefined;
 
-  if (analysisType !== "simplify" && analysisType !== "risks") {
-    res.status(400).json({ success: false, error: "analysisType must be 'simplify' or 'risks'." });
+  if (analysisType !== "simplify" && analysisType !== "risks" && analysisType !== "checklist") {
+    res.status(400).json({ success: false, error: "analysisType must be 'simplify', 'risks', or 'checklist'." });
     return;
   }
 

@@ -24,7 +24,7 @@ export function validateFileUpload(req: Request, res: Response, next: NextFuncti
 
 export function validateAnalysisBody(req: Request, res: Response, next: NextFunction): void {
   const { documentContent, documentId, analysisType } = req.body ?? {};
-  const validTypes = ["simplify", "risks", "compare", "qa"];
+  const validTypes = ["simplify", "risks", "compare", "qa", "checklist"];
 
   const hasContent =
     (typeof documentContent === "string" && documentContent.trim().length > 0) ||

@@ -9,7 +9,9 @@ export function resolveContent(
   const documentId = body[idField];
   if (typeof documentId === "string" && documentId) {
     const doc = storageService.get(documentId);
-    return doc ? doc.content : null;
+    if (doc && doc.content) {
+      return doc.content;
+    }
   }
   const content = body[contentField];
   return typeof content === "string" && content.trim() ? content : null;

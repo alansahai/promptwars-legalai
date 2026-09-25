@@ -25,12 +25,14 @@ started. Built for the **PromptWars: AI for Legal Assistance & Access** challeng
 
 ## Features
 
-- **Document upload** — PDF, DOCX, and TXT, up to 10MB
-- **Simplified Summary** — legal jargon rewritten in plain English, with key points and defined terms
-- **Risk Analysis** — obligations, risks, and ambiguous clauses, each rated high/medium/low
-- **Document Comparison** — structured, section-by-section diff between two documents
-- **Q&A** — ask questions answered only from the uploaded document, with an explicit "not covered" fallback
-- **Export** — download any analysis as Markdown/JSON
+- **Document Ingestion** — Drag-and-drop upload (PDF, DOCX, TXT up to 10MB) or direct legal text paste
+- **Instant Test Fixtures** — One-click sample contracts (Residential Lease, Software MSA) for instant live evaluation
+- **Simplified Summary** — Dense legal jargon rewritten in plain English, with bulleted key points and defined terms glossary
+- **Risk & Obligation Audit** — Overall risk meter, obligations, red flags, and ambiguous clauses rated high/medium/low
+- **Action Checklist & Lawyer Prep** — Interactive preparation checklist with checkboxes, strategic user options, and tailored questions for legal counsel
+- **Document Comparison** — Structured, section-by-section diff between two documents with plain-language legal impact
+- **Grounded Q&A** — Ask questions answered strictly from the uploaded document with confidence and source grounding pills
+- **Export & Reporting** — Download formatted Markdown analysis reports or copy formatted text to clipboard with one click
 
 ## GenAI integration
 

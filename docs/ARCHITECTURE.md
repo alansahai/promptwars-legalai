@@ -42,15 +42,16 @@ same TypeScript service code under `src/api/services`, so the app runs two ways:
 
 ## GenAI integration
 
-All four analysis modes go through a single function, `analyzeDocument()` in
+All five analysis modes go through a single function, `analyzeDocument()` in
 `src/api/services/aiService.ts`:
 
-| Mode       | Prompt builder (`src/utils/prompts.ts`) | Output shape                                  |
-|------------|------------------------------------------|------------------------------------------------|
-| `simplify` | plain-English rewrite                    | `{ summary, keyPoints[], termsDefinitions{} }`  |
-| `risks`    | obligation/risk/ambiguity extraction     | `{ obligations[], risks[], ambiguities[] }`     |
-| `compare`  | diff between two documents                | `{ differences[], summary }`                    |
-| `qa`       | grounded question answering               | `{ answer, groundedInDocument }`                |
+| Mode        | Prompt builder (`src/utils/prompts.ts`)       | Output shape                                                  |
+|-------------|------------------------------------------------|----------------------------------------------------------------|
+| `simplify`  | plain-English rewrite                          | `{ summary, keyPoints[], termsDefinitions{} }`                 |
+| `risks`     | obligation/risk/ambiguity extraction           | `{ overallRiskLevel, obligations[], risks[], ambiguities[] }`  |
+| `checklist` | actionable checklist & lawyer prep questions   | `{ summary, actionItems[], questionsForLawyer[], userOptions[]}`|
+| `compare`   | diff between two documents                      | `{ differences[], summary }`                                   |
+| `qa`        | grounded question answering                     | `{ answer, groundedInDocument }`                               |
 
 Design choices:
 

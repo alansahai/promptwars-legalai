@@ -38,6 +38,7 @@ ${DISCLAIMER}
 
 Task: Analyze the following legal document for the obligations it creates, potential risks to the
 signer, and ambiguous language. Severity must be exactly one of "high", "medium", or "low".
+Also provide an overallRiskLevel based on the aggregate severity of clauses found.
 
 Document:
 """
@@ -46,6 +47,7 @@ ${document}
 
 Respond with ONLY valid JSON, no markdown fences, matching exactly this shape:
 {
+  "overallRiskLevel": "high|medium|low",
   "obligations": [{"item": "what the signer must do or provide", "severity": "high|medium|low"}],
   "risks": [{"item": "a risk or red flag for the signer", "severity": "high|medium|low"}],
   "ambiguities": ["a clause that is vague or open to interpretation"]
@@ -92,6 +94,31 @@ Respond with ONLY valid JSON, no markdown fences, matching exactly this shape:
 {
   "answer": "plain-English answer, or a clear statement that this is not covered in the document",
   "groundedInDocument": true
+}`,
+
+    checklist: () => `
+${DISCLAIMER}
+
+Task: Generate an actionable preparation checklist, strategic user options, and lawyer consultation questions for the legal document below.
+Help the user understand immediate deadlines, obligations, tactical choices, and what specific questions to ask an attorney before signing or agreeing.
+
+Document:
+"""
+${document}
+"""
+
+Respond with ONLY valid JSON, no markdown fences, matching exactly this shape:
+{
+  "summary": "2-3 sentence overview of immediate actionable takeaways and next steps for the user",
+  "actionItems": [
+    {"task": "Actionable task or compliance step required before or upon signing", "deadlineOrTrigger": "e.g., within 30 days, prior to execution, or monthly", "priority": "high|medium|low"}
+  ],
+  "questionsForLawyer": [
+    {"question": "Precise, tactical question the user should ask a legal professional", "contextOrClause": "The specific clause or risk motivating this question"}
+  ],
+  "userOptions": [
+    {"option": "Strategic course of action or negotiation point (e.g. Request mutual indemnification, dispute resolution venue change)", "pros": "Advantage of this option", "cons": "Potential drawback or tradeoff"}
+  ]
 }`,
   };
 

@@ -60,6 +60,7 @@ export default async function handler(
       filename: stored.filename,
       characterCount: content.length,
       preview: previewText(content),
+      content,
     });
   } catch (error) {
     console.error("Upload parsing error:", error);
