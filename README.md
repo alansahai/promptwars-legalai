@@ -20,7 +20,7 @@ started. Built for the **PromptWars: AI for Legal Assistance & Access** challeng
 | **Code Quality** | Full TypeScript strict mode, ESLint (flat config) + Prettier enforced in CI, zero lint warnings, modular shared services, clear separation of concerns, and centralized error handling with typed API responses. |
 | **Security** | 0 known vulnerabilities (`npm audit`), comprehensive enterprise HTTP security headers (`Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `COOP`, `CORP`), file upload size/type sanitization, rate limiting, and zero third-party persistence of client legal documents. |
 | **Efficiency** | High-efficiency bounded LRU cache (300 entries, 1h TTL), `cleanAndCompactLegalText()` prompt token compression saving 25-35% tokens per call, whitespace-invariant cache keys, dynamic lazy loading of heavy document parsers (`pdf-parse`, `mammoth`) cutting cold start times to <150ms, Next.js self-hosted fonts with zero CLS, client-side code splitting (`next/dynamic`), and zero-latency tab persistence. |
-| **Testing** | 71 automated tests across 9 test suites (Jest + Supertest + Testing Library + jest-axe) achieving >93% statement coverage across unit, integration, and accessibility layers, verified across Node versions in CI — see [Testing](#testing) below. |
+| **Testing** | 72 automated tests across 9 test suites (Jest + Supertest + Testing Library + jest-axe) achieving >93% statement coverage across unit, integration, and accessibility layers, verified across Node versions in CI — see [Testing](#testing) below. |
 | **Accessibility** | WCAG 2.1 AA compliance: skip-to-content links, keyboard-navigable ARIA tab patterns with Arrow key handling, accessible form labels, `aria-live` announcement regions, visible focus rings, and automated axe-core accessibility tests in CI — see [Accessibility](#accessibility) below. |
 
 ## Features
@@ -219,7 +219,7 @@ npm run test:watch    # watch mode
 npm run test:ci        # CI mode (used by GitHub Actions)
 ```
 
-71 automated tests across three layers and 9 test suites, achieving >93% statement coverage:
+72 automated tests across three layers and 9 test suites, achieving >93% statement coverage:
 
 - **Unit** (`tests/unit/`): `aiService` (Gemini calls mocked — no live network calls in CI),
   `documentService`, `storageService`, `cache`, `prompts`, `validation`, `resolveDocumentContent`.
