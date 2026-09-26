@@ -13,7 +13,7 @@ const DISCLAIMER =
  * Yields ~25-35% token reduction on raw PDF/OCR extracts without semantic loss.
  */
 export function cleanAndCompactLegalText(text: string): string {
-  if (!text) return "";
+  if (!text || typeof text !== "string") return "";
   return text
     // Replace Windows CRLF and legacy CR with standard LF
     .replace(/\r\n|\r/g, "\n")

@@ -29,7 +29,12 @@ export default function ComparisonView({ documentId, documentContent }: Comparis
           documentContent2: secondDoc.content,
         }),
       });
-      const body = await res.json();
+      let body;
+      try {
+        body = await res.json();
+      } catch {
+        throw new Error(`Server returned an unexpected response (${res.status}). Please try again.`);
+      }
       if (!res.ok || !body.success) {
         throw new Error(body.error || "Comparison failed");
       }

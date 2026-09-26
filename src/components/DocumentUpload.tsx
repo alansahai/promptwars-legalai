@@ -45,7 +45,12 @@ export default function DocumentUpload({ label, onUploaded }: DocumentUploadProp
 
     try {
       const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const body = (await res.json()) as UploadResponseBody;
+      let body: UploadResponseBody;
+      try {
+        body = (await res.json()) as UploadResponseBody;
+      } catch {
+        throw new Error(`Server returned an unexpected response (${res.status}). Please try again.`);
+      }
 
       if (!res.ok || !body.success || !body.documentId) {
         throw new Error(body.error || "Upload failed");

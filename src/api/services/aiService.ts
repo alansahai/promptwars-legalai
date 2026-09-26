@@ -36,7 +36,7 @@ function cacheKey(request: AnalysisRequest): string {
  * avoid redundant API calls and reduce latency/cost.
  */
 export async function analyzeDocument(request: AnalysisRequest): Promise<AnalysisResult> {
-  if (!request.documentContent || !request.documentContent.trim()) {
+  if (!request.documentContent || typeof request.documentContent !== "string" || !request.documentContent.trim()) {
     return { success: false, error: "Document content is empty." };
   }
 
