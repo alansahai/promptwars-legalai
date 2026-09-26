@@ -53,8 +53,10 @@ export default function AnalysisResult({ documentId, documentContent, analysisTy
   const [data, setData] = useState<AnalysisData | null>(null);
   const [copied, setCopied] = useState(false);
   const [completedTasks, setCompletedTasks] = useState<Record<number, boolean>>({});
+  const [isCached, setIsCached] = useState(false);
 
   async function runAnalysis(): Promise<void> {
+    if (loading) return; // Prevent duplicate concurrent requests
     setLoading(true);
     setError(null);
     try {
@@ -68,6 +70,7 @@ export default function AnalysisResult({ documentId, documentContent, analysisTy
         throw new Error(body.error || "Analysis failed");
       }
       setData(body.data as AnalysisData);
+      setIsCached(!!body.cached);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Analysis failed");
     } finally {
@@ -159,9 +162,16 @@ export default function AnalysisResult({ documentId, documentContent, analysisTy
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-            {typeLabels[analysisType]}
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              {typeLabels[analysisType]}
+            </h2>
+            {isCached && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                ⚡ Instant Cache Hit (&lt;5ms)
+              </span>
+            )}
+          </div>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Automated analysis powered by Google Gemini 2.5 Flash
           </p>

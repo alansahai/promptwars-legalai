@@ -27,5 +27,7 @@ export default async function handler(
   }
 
   const result = await analyzeDocument({ documentContent, analysisType });
+  res.setHeader("X-Cache", result.cached ? "HIT" : "MISS");
+  res.setHeader("Cache-Control", "no-transform, public, max-age=0, s-maxage=3600");
   res.status(result.success ? 200 : 502).json(result);
 }

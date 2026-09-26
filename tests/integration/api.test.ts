@@ -40,10 +40,18 @@ describe("API Endpoints", () => {
     expect(res.status).toBe(400);
   });
 
-  test("POST /api/analyze succeeds with valid input", async () => {
+  test("POST /api/analyze succeeds with valid input (simplify)", async () => {
     const res = await request(app)
       .post("/api/analyze")
       .send({ documentContent: "Some contract text", analysisType: "simplify" });
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test("POST /api/analyze succeeds with checklist mode", async () => {
+    const res = await request(app)
+      .post("/api/analyze")
+      .send({ documentContent: "Some contract text", analysisType: "checklist" });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });

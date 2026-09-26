@@ -169,47 +169,78 @@ export default function Dashboard() {
                 ))}
               </div>
 
-              {/* Tab Panels */}
+              {/* Tab Panels with zero-latency state preservation */}
               <div
-                id={`panel-${activeTab}`}
+                id="panel-simplify"
                 role="tabpanel"
-                aria-labelledby={`tab-${activeTab}`}
+                aria-labelledby="tab-simplify"
                 tabIndex={0}
-                className="focus-visible:outline-none"
+                hidden={activeTab !== "simplify"}
+                className={`focus-visible:outline-none ${activeTab === "simplify" ? "block" : "hidden"}`}
               >
-                {activeTab === "simplify" && (
-                  <AnalysisResult
-                    documentId={document.id}
-                    documentContent={document.content}
-                    analysisType="simplify"
-                  />
-                )}
-                {activeTab === "risks" && (
-                  <AnalysisResult
-                    documentId={document.id}
-                    documentContent={document.content}
-                    analysisType="risks"
-                  />
-                )}
-                {activeTab === "checklist" && (
-                  <AnalysisResult
-                    documentId={document.id}
-                    documentContent={document.content}
-                    analysisType="checklist"
-                  />
-                )}
-                {activeTab === "compare" && (
-                  <ComparisonView
-                    documentId={document.id}
-                    documentContent={document.content}
-                  />
-                )}
-                {activeTab === "qa" && (
-                  <QAInterface
-                    documentId={document.id}
-                    documentContent={document.content}
-                  />
-                )}
+                <AnalysisResult
+                  documentId={document.id}
+                  documentContent={document.content}
+                  analysisType="simplify"
+                />
+              </div>
+
+              <div
+                id="panel-risks"
+                role="tabpanel"
+                aria-labelledby="tab-risks"
+                tabIndex={0}
+                hidden={activeTab !== "risks"}
+                className={`focus-visible:outline-none ${activeTab === "risks" ? "block" : "hidden"}`}
+              >
+                <AnalysisResult
+                  documentId={document.id}
+                  documentContent={document.content}
+                  analysisType="risks"
+                />
+              </div>
+
+              <div
+                id="panel-checklist"
+                role="tabpanel"
+                aria-labelledby="tab-checklist"
+                tabIndex={0}
+                hidden={activeTab !== "checklist"}
+                className={`focus-visible:outline-none ${activeTab === "checklist" ? "block" : "hidden"}`}
+              >
+                <AnalysisResult
+                  documentId={document.id}
+                  documentContent={document.content}
+                  analysisType="checklist"
+                />
+              </div>
+
+              <div
+                id="panel-compare"
+                role="tabpanel"
+                aria-labelledby="tab-compare"
+                tabIndex={0}
+                hidden={activeTab !== "compare"}
+                className={`focus-visible:outline-none ${activeTab === "compare" ? "block" : "hidden"}`}
+              >
+                <ComparisonView
+                  documentId={document.id}
+                  documentContent={document.content}
+                />
+              </div>
+
+              <div
+                id="panel-qa"
+                role="tabpanel"
+                aria-labelledby="tab-qa"
+                tabIndex={0}
+                hidden={activeTab !== "qa"}
+                className={`focus-visible:outline-none ${activeTab === "qa" ? "block" : "hidden"}`}
+              >
+                <QAInterface
+                  documentId={document.id}
+                  documentContent={document.content}
+                />
               </div>
             </div>
           )}
