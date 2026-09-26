@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import DocumentUpload from "@/components/DocumentUpload";
 import AnalysisResult from "@/components/AnalysisResult";
-import ComparisonView from "@/components/ComparisonView";
-import QAInterface from "@/components/QAInterface";
+
+const ComparisonView = dynamic(() => import("@/components/ComparisonView"), {
+  loading: () => (
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 animate-pulse">
+      <div className="h-5 w-48 bg-slate-200 dark:bg-slate-800 rounded mb-4" />
+      <div className="h-24 bg-slate-100 dark:bg-slate-800/50 rounded" />
+    </div>
+  ),
+});
+
+const QAInterface = dynamic(() => import("@/components/QAInterface"), {
+  loading: () => (
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 animate-pulse">
+      <div className="h-5 w-48 bg-slate-200 dark:bg-slate-800 rounded mb-4" />
+      <div className="h-24 bg-slate-100 dark:bg-slate-800/50 rounded" />
+    </div>
+  ),
+});
 
 type Tab = "simplify" | "risks" | "checklist" | "compare" | "qa";
 
@@ -37,13 +54,14 @@ export default function Dashboard() {
     window.document.getElementById(`tab-${TABS[nextIndex].id}`)?.focus();
   }
 
-  const wordCount = document?.content
-    ? document.content.trim().split(/\s+/).filter(Boolean).length
-    : document?.preview
-    ? document.preview.trim().split(/\s+/).filter(Boolean).length
-    : 0;
-
-  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+  const { wordCount, readingTime } = useMemo(() => {
+    const raw = document?.content || document?.preview || "";
+    const count = raw.trim() ? raw.trim().split(/\s+/).filter(Boolean).length : 0;
+    return {
+      wordCount: count,
+      readingTime: Math.max(1, Math.ceil(count / 200)),
+    };
+  }, [document?.content, document?.preview]);
 
   return (
     <>
@@ -56,6 +74,14 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        {/* Skip to Main Content Link for Accessibility (WCAG 2.4.1) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-xs focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-400"
+        >
+          Skip to main content
+        </a>
+
         {/* Header Bar */}
         <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 sticky top-0 z-20 shadow-xs">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
@@ -93,7 +119,7 @@ export default function Dashboard() {
           <span className="font-semibold">Notice:</span> This assistant provides automated document analysis to improve legal accessibility. It does not provide legal advice or create an attorney-client relationship.
         </div>
 
-        <main className="mx-auto max-w-5xl px-4 py-8">
+        <main id="main-content" className="mx-auto max-w-5xl px-4 py-8">
           <div className="mb-6 flex flex-wrap items-baseline justify-between gap-2">
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">

@@ -73,4 +73,34 @@ describe("AI Service (Gemini)", () => {
     expect(second.cached).toBe(true);
     expect(mockGenerateContent).toHaveBeenCalledTimes(1);
   });
+
+  test("whitespace-invariant cache hit when CRLF or redundant spaces differ", async () => {
+    mockGenerateContent.mockResolvedValue({
+      response: { text: () => JSON.stringify({ summary: "normalized-cache" }) },
+    });
+    const seed = Math.random();
+    const req1 = { documentContent: `Contract Clause ${seed}\r\n\r\n   Section   A  `, analysisType: "simplify" as const };
+    const req2 = { documentContent: `Contract Clause ${seed}\n\nSection A`, analysisType: "simplify" as const };
+
+    const res1 = await analyzeDocument(req1);
+    const res2 = await analyzeDocument(req2);
+
+    expect(res1.success).toBe(true);
+    expect(res2.cached).toBe(true);
+    expect(mockGenerateContent).toHaveBeenCalledTimes(1);
+  });
+
+  test("falls back to raw text when JSON parsing completely fails", async () => {
+    mockGenerateContent.mockResolvedValue({
+      response: {
+        text: () => "Non-JSON response text without any curly braces",
+      },
+    });
+    const result = await analyzeDocument({
+      documentContent: `Raw fallback test ${Math.random()}`,
+      analysisType: "simplify",
+    });
+    expect(result.success).toBe(true);
+    expect(result.data).toEqual({ raw: "Non-JSON response text without any curly braces" });
+  });
 });

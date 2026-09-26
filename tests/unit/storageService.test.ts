@@ -37,4 +37,23 @@ describe("Storage Service", () => {
     storageService.save("a.txt", "text/plain", "a");
     expect(storageService.size).toBe(before + 1);
   });
+
+  test("pruneExpired deletes expired documents and returns count", () => {
+    const nowSpy = jest.spyOn(Date, "now");
+    nowSpy.mockReturnValue(1_000_000);
+    storageService.save("expire-me.txt", "text/plain", "content");
+
+    nowSpy.mockReturnValue(1_000_000 + 26 * 60 * 60 * 1000);
+    const pruned = storageService.pruneExpired();
+    expect(pruned).toBeGreaterThanOrEqual(1);
+  });
+
+  test("evicts oldest document when capacity reaches MAX_STORED_DOCS (100)", () => {
+    const firstDoc = storageService.save("doc-0.txt", "text/plain", "first");
+    for (let i = 1; i <= 105; i++) {
+      storageService.save(`doc-${i}.txt`, "text/plain", `content ${i}`);
+    }
+    expect(storageService.size).toBeLessThanOrEqual(100);
+    expect(storageService.get(firstDoc.id)).toBeUndefined();
+  });
 });

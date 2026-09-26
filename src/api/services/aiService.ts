@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GEMINI_MODEL } from "@/utils/constants";
-import { buildPrompt } from "@/utils/prompts";
+import { buildPrompt, cleanAndCompactLegalText } from "@/utils/prompts";
 import analysisCache from "@/utils/cache";
 import { AnalysisRequest, AnalysisResult, AnalysisData } from "@/types";
 
@@ -19,12 +19,14 @@ function getClient(): GoogleGenerativeAI {
 }
 
 function cacheKey(request: AnalysisRequest): string {
+  const normalizedDoc = cleanAndCompactLegalText(request.documentContent);
+  const normalizedContext = cleanAndCompactLegalText(request.additionalContext || "");
   return createHash("sha256")
     .update(request.analysisType)
     .update("::")
-    .update(request.documentContent)
+    .update(normalizedDoc)
     .update("::")
-    .update(request.additionalContext || "")
+    .update(normalizedContext)
     .digest("hex");
 }
 

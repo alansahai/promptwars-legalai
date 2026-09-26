@@ -13,6 +13,14 @@ export default function Home() {
       </Head>
 
       <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        {/* Skip to Main Content Link for Accessibility (WCAG 2.4.1) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-xs focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-400"
+        >
+          Skip to main content
+        </a>
+
         {/* Navigation */}
         <header className="border-b border-slate-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-30 dark:border-slate-800/80 dark:bg-slate-900/80">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
@@ -47,7 +55,8 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Hero Section */}
+        <main id="main-content">
+          {/* Hero Section */}
         <section className="relative overflow-hidden px-4 pt-16 pb-20 sm:px-6 lg:pt-24 lg:pb-28">
           <div className="mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50/80 px-3.5 py-1 text-xs font-semibold text-brand-700 dark:border-brand-900 dark:bg-brand-950/60 dark:text-brand-300 mb-6">
@@ -203,8 +212,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+      </main>
 
-        {/* Legal Disclaimer Footer */}
+      {/* Legal Disclaimer Footer */}
         <footer className="border-t border-slate-200 bg-white py-10 dark:border-slate-800 dark:bg-slate-900">
           <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">

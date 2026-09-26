@@ -110,6 +110,30 @@ describe("API Endpoints", () => {
     expect(res.body.error).toBeDefined();
   });
 
+  test("POST /api/analyze succeeds with risks mode", async () => {
+    const res = await request(app)
+      .post("/api/analyze")
+      .send({ documentContent: "Some contract text", analysisType: "risks" });
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+  });
+
+  test("POST /api/analyze rejects missing document content", async () => {
+    const res = await request(app)
+      .post("/api/analyze")
+      .send({ analysisType: "simplify" });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBeDefined();
+  });
+
+  test("POST /api/ask rejects missing document content", async () => {
+    const res = await request(app)
+      .post("/api/ask")
+      .send({ question: "What is the penalty?" });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBeDefined();
+  });
+
   test("unknown routes return 404", async () => {
     const res = await request(app).get("/api/does-not-exist");
     expect(res.status).toBe(404);

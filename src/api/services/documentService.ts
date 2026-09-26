@@ -1,19 +1,22 @@
-import pdfParse from "pdf-parse";
-import mammoth from "mammoth";
-
 const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 /**
  * Extracts plain text content from an uploaded document buffer based on its
  * MIME type. Supports PDF, DOCX, and plain text.
+ * Heavy native/Wasm parsers (pdf-parse, mammoth) are dynamically imported on-demand
+ * to drastically reduce serverless cold-start latency and module memory overhead.
  */
 export async function extractText(buffer: Buffer, mimetype: string): Promise<string> {
   switch (mimetype) {
     case "application/pdf": {
-      const parsed = await pdfParse(buffer);
+      const pdfModule = await import("pdf-parse");
+      const parse = (pdfModule.default || pdfModule) as unknown as (buf: Buffer) => Promise<{ text: string }>;
+      const parsed = await parse(buffer);
       return parsed.text.trim();
     }
     case DOCX_MIME: {
+      const mammothModule = await import("mammoth");
+      const mammoth = mammothModule.default || mammothModule;
       const parsed = await mammoth.extractRawText({ buffer });
       return parsed.value.trim();
     }

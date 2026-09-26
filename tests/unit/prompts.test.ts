@@ -1,4 +1,4 @@
-import { buildPrompt } from "@/utils/prompts";
+import { buildPrompt, cleanAndCompactLegalText } from "@/utils/prompts";
 
 describe("buildPrompt", () => {
   test("simplify prompt includes the document and expected JSON keys", () => {
@@ -44,5 +44,15 @@ describe("buildPrompt", () => {
     const longDoc = "x".repeat(60000);
     const prompt = buildPrompt({ documentContent: longDoc, analysisType: "simplify" });
     expect(prompt).toContain("[...document truncated for length...]");
+  });
+
+  test("cleanAndCompactLegalText normalizes whitespace, control chars, and line breaks", () => {
+    const messyText = "\x00Section 1.   Definitions.\r\n\r\n\r\n\r\n   The    Landlord   shall pay.\t\t\n";
+    const cleaned = cleanAndCompactLegalText(messyText);
+    expect(cleaned).toBe("Section 1. Definitions.\n\nThe Landlord shall pay.");
+  });
+
+  test("cleanAndCompactLegalText returns empty string for empty input", () => {
+    expect(cleanAndCompactLegalText("")).toBe("");
   });
 });
